@@ -12,6 +12,8 @@ public class PlatformerPlayer : MonoBehaviour
     private Animator anim;
     private BoxCollider2D box;
 
+    // bool updatedScale = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +40,47 @@ public class PlatformerPlayer : MonoBehaviour
         //{
         //    grounded = true;
         //}
+
+        // if we are on the moving platform, attach to it
+        // if we are not on the platform, detach
+        MovingPlatform platform = null;
+        if (hit != null)
+        {
+            platform = hit.GetComponent<MovingPlatform>();
+        }
+        if(platform != null)
+        {
+            //transform.parent = platform.transform;
+            //Debug.Log(transform.localScale.x);
+            //Debug.Log(platform.transform.localScale.x);
+            //transform.localScale = new Vector3(
+            //transform.localScale.x / platform.transform.localScale.x,
+            //transform.localScale.y / platform.transform.localScale.y,
+            //transform.localScale.z / platform.transform.localScale.z);
+            //transform.localScale = Vector3.one;
+            // Debug.Log(transform.localScale);
+            // updatedScale = true;
+            // transform.position = platform.transform.position;
+            // could add rotation here too if needed
+            transform.SetParent(platform.transform, true);
+        }
+        else
+        {
+            transform.parent = null;
+            // transform.localScale = Vector3.one;
+            // updatedScale = false;
+        }
+
+        // make sure scale stays the same
+        Vector3 playerScale = Vector3.one;
+        if(platform != null)
+        {
+            // playerScale = platform.transform.localScale;
+        }
+        if(!Mathf.Approximately(deltaX, 0))
+        {
+            // transform.localScale = new Vector3(Mathf.Sign(deltaX) / playerScale.x, 1 / playerScale.y, 1);
+        }
 
         anim.SetFloat("Speed", Mathf.Abs(deltaX));
         if(!Mathf.Approximately(deltaX, 0))
